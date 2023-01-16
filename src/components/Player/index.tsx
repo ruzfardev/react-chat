@@ -9,6 +9,7 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getMinAndSeconds } from "../../helpers";
 import { IoIosMusicalNotes } from "react-icons/io";
+import { BiVolumeFull } from "react-icons/bi";
 import { setSelectedMusic } from "../../app/slices";
 
 function Player() {
@@ -63,6 +64,13 @@ function Player() {
     const prevMusic = music[currentMusicIndex - 1];
     dispatch(setSelectedMusic(prevMusic || music[music.length - 1]));
   };
+
+  const handleVolume = (value: number) => {
+    console.log(value);
+    if (audioRef.current) {
+      audioRef.current.volume = value / 100;
+    }
+  };
   return (
     <div
       style={{
@@ -106,6 +114,10 @@ function Player() {
         <Typography.Text>{album}</Typography.Text>
       </Space>
       <Space direction="vertical">
+        <Space style={{ width: "100%", justifyContent: "space-between" }}>
+          <Typography.Text>{getMinAndSeconds(sliderValue)}</Typography.Text>
+          <Typography.Text>{getMinAndSeconds(audioDuration)}</Typography.Text>
+        </Space>
         <Slider
           disabled={!audioUrl}
           max={audioDuration}
@@ -118,10 +130,35 @@ function Player() {
             }
           }}
         />
-        <Space style={{ width: "100%", justifyContent: "space-between" }}>
-          <Typography.Text>{getMinAndSeconds(sliderValue)}</Typography.Text>
-          <Typography.Text>{getMinAndSeconds(audioDuration)}</Typography.Text>
-        </Space>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <BiVolumeFull
+            style={{
+              marginRight: "10px",
+              marginLeft: "auto",
+            }}
+            size={25}
+            color="#bfbfbf"
+          />
+          <div
+            style={{
+              width: "20%",
+            }}
+          >
+            <Slider
+              defaultValue={100}
+              onChange={handleVolume}
+              min={0}
+              max={100}
+              tooltip={{ formatter: null }}
+            />
+          </div>
+        </div>
       </Space>
       <Space size={100} style={{ margin: "0 auto" }}>
         <Button

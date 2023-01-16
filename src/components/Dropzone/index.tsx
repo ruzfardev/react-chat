@@ -1,5 +1,5 @@
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload } from "antd";
+import { FolderAddOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Upload, message } from "antd";
 import { loadMusicFolder } from "../../app/slices";
 import React from "react";
 import { useAppDispatch } from "../../app/hooks";
@@ -41,10 +41,10 @@ function DropFile() {
       onChange={handleFiles}
     >
       <p className="ant-upload-drag-icon">
-        <UploadOutlined type="inbox" />
+        <FolderAddOutlined type="inbox" />
       </p>
       <p className="ant-upload-text">
-        Click or drag files to this area to upload
+        Click or drag <strong>music folder</strong> to this area to upload
       </p>
     </Upload.Dragger>
   );
