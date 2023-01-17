@@ -40,15 +40,18 @@ h1{
 }
 .sidebar{
     flex: 1;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 .chat{
     flex: 2;
 }
 .header{
-    background-color: #98cdffbf;
+    background-color: #84c0f8bf;
     padding: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.chat .header{
+    padding: 18px;
 }
 
 /* Hide scrollbar */
@@ -62,4 +65,41 @@ h1{
 /* List item hover */
 .ant-list-item:hover{
     background-color: #74b8f8;
+}
+/* Messages container */
+.ant-layout-content{
+    padding: 10px;
+    height: calc(100% - 141px);
+    overflow-y: scroll;
+}
+.send_message{
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+.send_message.ant-input{
+    width: 200px;
+}
+
+/* Message bubble */
+.ant-card{
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: none;
+    border-radius: 0 20px 20px 20px;
+}
+.ant-card.owner{
+    border-radius: 20px 20px 0px 20px;
+    background-color: #84c0f8bf;
+    float: right;
+}
+.ant-card-meta.owner{
+    
+    flex-direction: row-reverse;
+}
+.ant-card .ant-card-body{
+    padding: 0;
 }
