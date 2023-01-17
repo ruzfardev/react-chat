@@ -12,8 +12,7 @@ const Home = () => {
         alignItems: "center",
       }}
     >
-      {/* <h1>ruzfardev</h1> */}
-      <div className="container-app">
+      <div className="container-app glass">
         <Sidebar />
         <Chat />
       </div>

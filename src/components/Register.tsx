@@ -7,8 +7,10 @@ export const Register = () => {
     <Card
       title="Register"
       style={{
-        width: "25%",
+        width: "35%",
         textAlign: "center",
+        margin: "auto",
+        marginTop: "10%",
       }}
     >
       <Form layout="vertical">

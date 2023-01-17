@@ -7,6 +7,8 @@ export const Login = () => {
       style={{
         width: "25%",
         textAlign: "center",
+        margin: "auto",
+        marginTop: "15%",
       }}
     >
       <Form layout="vertical">
