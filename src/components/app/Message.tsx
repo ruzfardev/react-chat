@@ -19,8 +19,20 @@ export const Message = () => {
           alignItems: "center",
         }}
         title="Sender Name"
-        description="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        avatar={<Avatar size={45} src="https://i.pravatar.cc/300" />}
+        description="Hello, I am waiting your message. Reponse me as soon as possible."
+        avatar={
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar size={45} src="https://i.pravatar.cc/300" />
+            {/* Timesatmp */}
+            <span style={{ fontSize: "12px", color: "gray" }}>12:00 PM</span>
+          </div>
+        }
       />
     </Card>
   );

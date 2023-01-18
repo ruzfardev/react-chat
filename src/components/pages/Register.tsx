@@ -1,48 +1,64 @@
 import React from "react";
-import { Button, Card, Form, Input, Typography, Upload } from "antd";
+import { Button, Card, Form, Input, Spin, Typography, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { auth, storage, db } from "../../services/firebase";
 import { setDoc, doc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RegisterModel } from "../../models/register.model";
 export const Register = () => {
   const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const navigate = useNavigate();
   const onSubmit = async (values: RegisterModel) => {
     console.log(values);
     try {
+      setLoading(true);
       const res = await createUserWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
       const storageRef = ref(storage, `avatars/${res.user.uid}`);
-      let avatarURL = "";
       const uploadTask = uploadBytesResumable(storageRef, values.avatar.file);
       uploadTask.on(
         "state_changed",
-        (error: any) => {
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
           setError(error.message);
         },
         () => {
-          console.log("Upload complete");
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            avatarURL = downloadURL;
-            console.log(downloadURL);
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              displayName: values.userName,
+              photoURL: downloadURL,
+            });
+            await setDoc(doc(db, "users", res.user.uid), {
+              id: res.user.uid,
+              name: values.userName,
+              email: values.email,
+              avatar: downloadURL,
+            });
+            await setDoc(doc(db, "usersChats", res.user.uid), {});
+            setLoading(false);
+            navigate("/");
           });
         }
       );
-      await updateProfile(res.user, {
-        displayName: values.userName,
-        photoURL: avatarURL,
-      });
-      await setDoc(doc(db, "users", res.user.uid), {
-        id: res.user.uid,
-        name: values.userName,
-        email: values.email,
-        // avatar: avatarURL,
-      });
     } catch (error: any) {
       console.log(error);
       setError(error.message);
@@ -59,7 +75,7 @@ export const Register = () => {
       }}
     >
       <Form onFinish={onSubmit} layout="vertical">
-        <Form.Item name="name" label="Name">
+        <Form.Item name="userName" label="Name">
           <Input type="string" />
         </Form.Item>
         <Form.Item name="email" label="Email">
@@ -70,9 +86,9 @@ export const Register = () => {
         </Form.Item>
         <Form.Item name="avatar" label="Avatar">
           <Upload
+            multiple={false}
             listType="picture-card"
             accept="image/*"
-            // showUploadList={false}
             beforeUpload={() => false}
           >
             <div>
@@ -82,11 +98,11 @@ export const Register = () => {
           </Upload>
         </Form.Item>
         {error && <Typography.Text type="danger">{error}</Typography.Text>}
-        <Button htmlType="submit" type="primary" block>
-          Register
+        <Button htmlType="submit" type="primary" block disabled={loading}>
+          {loading ? <Spin /> : "Register"}
         </Button>
         <Typography.Text type="secondary">
-          Already have an account? Login
+          Already have an account? <Link to="/login">Login</Link>
         </Typography.Text>
       </Form>
     </Card>
