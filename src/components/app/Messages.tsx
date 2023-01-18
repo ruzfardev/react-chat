@@ -4,7 +4,7 @@ import { Message } from "./Message";
 
 export const Messages = () => {
   return (
-    <Content>
+    <Content className="hide_scrollbar">
       <Message />
       <Message />
       <Message />
