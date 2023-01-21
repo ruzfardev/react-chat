@@ -1,12 +1,12 @@
-import React from "react";
-import { Space, Typography, Layout, Input, Button, Upload } from "antd";
+import React, { useContext } from "react";
+import { Space, Typography, Layout } from "antd";
 import { Messages } from "./Messages";
-import { SendOutlined } from "@ant-design/icons";
-import { ImAttachment } from "react-icons/im";
-import { BsImage } from "react-icons/bs";
+import { ChatContext } from "../../context/ChatContext";
+import { SendInput } from "./SendInput";
 const { Header } = Layout;
 
 export const Chat = () => {
+  const { data } = useContext(ChatContext);
   return (
     <div className="chat">
       <Header className="header">
@@ -26,30 +26,12 @@ export const Chat = () => {
               color: "#202020",
             }}
           >
-            John Smith
+            {data.user?.name}
           </Typography.Title>
         </Space>
       </Header>
       <Messages />
-      <div className="send_message">
-        <Upload capture={true}>
-          <Button type="primary" icon={<ImAttachment />} />
-        </Upload>
-        <Upload capture={true}>
-          <Button type="primary" icon={<BsImage />} />
-        </Upload>
-        <Input
-          className="glass"
-          style={{ width: "calc(100% - 200px)" }}
-          placeholder="Send Message..."
-        />
-        <Button
-          style={{ width: "100px" }}
-          color="#84c0f8bf"
-          type="primary"
-          icon={<SendOutlined />}
-        />
-      </div>
+      <SendInput />
     </div>
   );
 };

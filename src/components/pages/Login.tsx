@@ -15,6 +15,7 @@ export const Login = () => {
       navigate("/");
     } catch (error: any) {
       setError(error.message);
+      setLoading(false);
     }
   };
   return (

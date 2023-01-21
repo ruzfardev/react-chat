@@ -1,39 +1,50 @@
 import { Avatar, Card, Image } from "antd";
-import React from "react";
+import React, { FC } from "react";
 
-export const Message = () => {
+export const Message: FC<{ message: any }> = (props) => {
+  const { message } = props;
   return (
-    <Card
-      className="glass owner"
-      //   cover={
-      //     // <Image
-      //     //   alt="example"
-      //     //   src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-      //     // />
-      //   }
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        // TODO: Make this dynamic
+        flexDirection: "row-reverse",
+      }}
     >
-      {/* Message container with sender name and text, avatar */}
-      <Card.Meta
-        className="owner"
-        style={{
-          alignItems: "center",
-        }}
-        title="Sender Name"
-        description="Hello, I am waiting your message. Reponse me as soon as possible."
-        avatar={
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Avatar size={45} src="https://i.pravatar.cc/300" />
-            {/* Timesatmp */}
-            <span style={{ fontSize: "12px", color: "gray" }}>12:00 PM</span>
-          </div>
-        }
-      />
-    </Card>
+      <Card
+        // TODO: Make this dynamic
+        className="glass owner"
+        //   cover={
+        //     // <Image
+        //     //   alt="example"
+        //     //   src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+        //     // />
+        //   }
+      >
+        {/* Message container with sender name and text, avatar */}
+        <Card.Meta
+          // TODO: Make this dynamic
+          className="owner"
+          style={{
+            alignItems: "center",
+          }}
+          title="Sender Name"
+          description={message.text}
+          avatar={
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Avatar size={45} src="https://i.pravatar.cc/300" />
+              <span style={{ fontSize: "12px", color: "gray" }}>12:00 PM</span>
+            </div>
+          }
+        />
+      </Card>
+    </div>
   );
 };

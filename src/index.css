@@ -76,9 +76,6 @@ h1{
     overflow-y: scroll;
 }
 .send_message{
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
     padding: 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
@@ -88,7 +85,7 @@ h1{
 
 /* Message bubble */
 .ant-card{
-    width: 70%;
+    width: fit-content;
     padding: 10px;
     margin-bottom: 10px;
     box-shadow: none;

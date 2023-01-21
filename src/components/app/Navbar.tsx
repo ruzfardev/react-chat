@@ -38,7 +38,7 @@ export const Navbar = () => {
             color: "#202020",
           }}
         >
-          ReactChat
+          {currentUser ? currentUser.displayName : "Chat App"}
         </Typography.Title>
         <Dropdown menu={{ items }} arrow={true}>
           <Avatar

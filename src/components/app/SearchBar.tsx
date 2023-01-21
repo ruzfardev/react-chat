@@ -22,10 +22,7 @@ export const SearchBar = () => {
     setSearch(e.target.value);
   };
   const handleSearch = async () => {
-    const q = query(
-      collection(db, "users"),
-      where("name".toLowerCase(), "==", search.toLowerCase())
-    );
+    const q = query(collection(db, "users"), where("name", "==", search));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       if (doc.data().id === currentUser?.uid) {
@@ -33,10 +30,7 @@ export const SearchBar = () => {
       } else {
         setFoundUsers([doc.data()]);
       }
-
-      console.log(doc.data());
     });
-    console.log(search);
   };
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
@@ -52,12 +46,12 @@ export const SearchBar = () => {
         currentUser?.uid > userInfo.id
           ? currentUser.uid + userInfo.id
           : userInfo.id + currentUser.uid;
-      console.log(combinedUID);
       const chat = await getDoc(doc(db, "chats", combinedUID));
       if (!chat.exists()) {
         await setDoc(doc(db, "chats", combinedUID), {
           messages: [],
         });
+        console.log(currentUser.uid, userInfo.id);
         await updateDoc(doc(db, "usersChats", currentUser.uid), {
           [combinedUID + ".userInfo"]: {
             id: userInfo.id,
@@ -75,7 +69,11 @@ export const SearchBar = () => {
           [combinedUID + ".date"]: serverTimestamp(),
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+    setFoundUsers([]);
+    setSearch("");
   };
 
   return (
@@ -95,34 +93,31 @@ export const SearchBar = () => {
           onKeyDown={handleKeyDown}
           placeholder="Search users..."
           className="glass no_border"
+          value={search}
         />
       </div>
-      {foundUsers.length > 0 ? (
-        foundUsers.map((user) => {
-          return (
-            <List.Item
-              onClick={() => handleSelectUser(user)}
-              key={user.id}
-              style={{
-                padding: "0.5rem",
-                cursor: "pointer",
-              }}
-            >
-              <Avatar
-                src={user.avatar}
-                size={55}
-                style={{ marginRight: "1rem", border: "2px solid #1890ff" }}
-              />
+      {foundUsers.length > 0
+        ? foundUsers.map((user) => {
+            return (
+              <List.Item
+                onClick={() => handleSelectUser(user)}
+                key={user.id}
+                style={{
+                  padding: "0.5rem",
+                  cursor: "pointer",
+                }}
+              >
+                <Avatar
+                  src={user.avatar}
+                  size={55}
+                  style={{ marginRight: "1rem", border: "2px solid #1890ff" }}
+                />
 
-              <List.Item.Meta title={user.name} />
-            </List.Item>
-          );
-        })
-      ) : (
-        <Typography.Text style={{ textAlign: "center" }}>
-          No users found
-        </Typography.Text>
-      )}
+                <List.Item.Meta title={user.name} />
+              </List.Item>
+            );
+          })
+        : ""}
     </List>
   );
 };
